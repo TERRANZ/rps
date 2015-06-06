@@ -37,16 +37,15 @@ public class GameWorker extends AbstractGameWorker {
                 gameStateMap.put(channel, GameState.IN_GAME);
                 if (parameters.isDebug())
                     logger.info("Player " + playerMap.get(channel).toString() + " is ready to play");
+                channel.write(MessageFactory.wrap(MessageType.S_GAME_READY, ""));
             }
-            break;
-            case MessageType.C_PLAYER_FIELD: {
-
+            case MessageType.C_PLAYER_SELECTED: {
+                GameThread gameThread = gameThreadMap.get(channel);
+                gameThread.onPlayerSelectedElement(channel, Integer.parseInt(root.getElementsByTagName("selection").item(0).getTextContent()));
             }
-            break;
-            case MessageType.C_TARGET: {
-            }
-            break;
-            case MessageType.C_OK: {
+            case MessageType.C_PLAYER_CANCELLED_GAME: {
+                GameThread gameThread = gameThreadMap.get(channel);
+                gameThread.playerCancelGame(channel);
             }
             break;
         }

@@ -3,8 +3,8 @@ package ru.mars.rps.server.game;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import ru.mars.gameserver.GameState;
-import ru.mars.gameserver.Parameters;
 import ru.mars.gameserver.MessageFactory;
+import ru.mars.gameserver.Parameters;
 
 /**
  * Date: 03.11.14
@@ -29,8 +29,8 @@ public class PairFinder implements Runnable {
                         if (chan1 != null && chan2 != null) {
                             if (Parameters.getInstance().isDebug())
                                 logger.info(chan1 + " and " + chan2 + " are in pair");
-                            chan1.write(MessageFactory.wrap(MessageType.S_PAIR_FOUND, "<player>" + 1 + "</player>"));
-                            chan2.write(MessageFactory.wrap(MessageType.S_PAIR_FOUND, "<player>" + 2 + "</player>"));
+                            chan1.write(MessageFactory.wrap(MessageType.S_PAIR_FOUND, ""));
+                            chan2.write(MessageFactory.wrap(MessageType.S_PAIR_FOUND, ""));
                             GameThread gameThread = new GameThread(chan1, chan2, GameWorker.getInstance().getPlayer(chan1), GameWorker.getInstance().getPlayer(chan2));
                             GameWorker.getInstance().addGameThreadForChannel(chan1, gameThread);
                             GameWorker.getInstance().addGameThreadForChannel(chan2, gameThread);

@@ -64,14 +64,10 @@ public abstract class AbstractGameWorker {
             Element root = doc.getDocumentElement();
             Integer command = Integer.parseInt(root.getElementsByTagName("id").item(0).getTextContent());
 
-            if (command == MessageType.C_PING) {
-                if (parameters.isDebug())
-                    logger.info("PING");
-                channel.write(MessageFactory.createPingMessage(getStatistic()));
-            } else if (command == MessageType.C_PLAYER_CANCEL_WAIT) {
+            if (command == MessageType.C_PLAYER_CANCEL_WAIT) {
                 if (parameters.isDebug())
                     logger.info("Player " + channel + " cancelled waiting");
-                channel.write(MessageFactory.wrap(MessageType.S_GAME_OVER, ""));
+                channel.write(MessageFactory.wrap(MessageType.S_GAME_CANCELLED, ""));
                 gameStateMap.put(channel, GameState.LOGIN);
             } else
                 processCommand(command, root, channel);
@@ -103,10 +99,6 @@ public abstract class AbstractGameWorker {
         synchronized (gameStateMap) {
             return gameStateMap.get(channel);
         }
-    }
-
-    public synchronized Statistic getStatistic() {
-        return new Statistic(getPlayerMap().size(), gameThreadMap.size() > 0 ? gameThreadMap.size() / 2 : 0);
     }
 
     public Player getPlayer(Channel channel) {

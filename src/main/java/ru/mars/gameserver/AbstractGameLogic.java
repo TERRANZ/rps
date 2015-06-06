@@ -6,7 +6,6 @@ import ru.mars.rps.server.game.GameWorker;
 import ru.mars.rps.server.game.Player;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.WeakHashMap;
 
 /**
@@ -16,9 +15,11 @@ import java.util.WeakHashMap;
 public abstract class AbstractGameLogic {
     protected Channel channel1, channel2;
     protected Player player1, player2;
+    protected int player1element = -1, player2element = -1;
     protected Map<Channel, Boolean> playerReady = new WeakHashMap<>();
     protected Logger logger = Logger.getLogger(this.getClass());
     protected volatile Boolean game = true;
+    protected Parameters parameters = Parameters.getInstance();
 
     public synchronized void setPlayerReady(Channel playerChannel) {
         playerReady.put(playerChannel, true);
@@ -30,6 +31,10 @@ public abstract class AbstractGameLogic {
     }
 
     protected abstract void onPlayerReady(Channel channel);
+
+    protected abstract void onPlayerSelectedElement(Channel channel, int element);
+
+    protected abstract void playerCancelGame(Channel channel);
 
     protected void sendGameOverMessage(Integer deadPlayer) {
         channel1.write(MessageFactory.createGameOverMessage(deadPlayer));
@@ -55,29 +60,5 @@ public abstract class AbstractGameLogic {
             }
         }
         game = false;
-    }
-
-
-    /**
-     * Returns a pseudo-random number between min and max, inclusive.
-     * The difference between min and max can be at most
-     * <code>Integer.MAX_VALUE - 1</code>.
-     *
-     * @param min Minimum value
-     * @param max Maximum value.  Must be greater than min.
-     * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
-     */
-    public static int randInt(int min, int max) {
-
-        // NOTE: Usually this should be a field rather than a method
-        // variable so that it is not re-seeded every call.
-        Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int randomNum = rand.nextInt((max - min) + 1) + min;
-
-        return randomNum;
     }
 }

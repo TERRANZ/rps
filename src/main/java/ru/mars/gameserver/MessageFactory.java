@@ -30,11 +30,15 @@ public class MessageFactory {
         return footer(header(msgId) + msg);
     }
 
-    public static String createPingMessage(Statistic statistic) {
-        return wrap(MessageType.S_PING, "<text> hello </text> <online>" + statistic.getOnline() + "</online><games>" + statistic.getGames() + "</games>");
+    public static String createGameOverMessage(Integer state) {
+        return wrap(MessageType.S_GAME_OVER, "<state>" + state + "</state>");
     }
 
-    public static String createGameOverMessage(Integer deadPlayer) {
-        return wrap(MessageType.S_GAME_OVER, "<deadplayer>" + deadPlayer + "</deadplayer>");
+    public static String createPlayerSelectionMessage(int element, int playerwon) {
+        return wrap(MessageType.S_PLAYER_SELECTED, "<element>" + element + "</element><won>" + playerwon + "</won>");
+    }
+
+    public static String createGameResultMessage(int state) {
+        return wrap(MessageType.S_GAME_OVER, "<state>" + state + "</state>");
     }
 }
