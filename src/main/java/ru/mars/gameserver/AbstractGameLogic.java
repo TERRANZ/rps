@@ -20,7 +20,7 @@ public abstract class AbstractGameLogic {
     protected Logger logger = Logger.getLogger(this.getClass());
     protected volatile Boolean game = true;
     protected Parameters parameters = Parameters.getInstance();
-    protected int rounds = 0;
+    protected int[] wins = new int[2];
 
     public synchronized void setPlayerReady(Channel playerChannel) {
         playerReady.put(playerChannel, true);

@@ -36,13 +36,6 @@ public class GameThread extends AbstractGameLogic implements Runnable {
     protected void onPlayerReady(Channel channel) {
         if (parameters.isDebug())
             logger.info("Player " + channel + " is ready");
-//        while (!isAllReady()) {
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                logger.error("Unable to wait", e);
-//            }
-//        }
     }
 
     @Override
@@ -58,17 +51,21 @@ public class GameThread extends AbstractGameLogic implements Runnable {
             //3 - s
             int playerwon = 0;
             boolean player1won = false;
+            logger.debug("Player1 element = " + player1element + " player2 element = " + player2element);
             if (player1element == player2element)
                 playerwon = 3;
             else {
+
                 switch (player1element) {
                     case 1: {
-                        if (player2element == 3) {
+                        if (player2element == 2) {
                             //r + p => p
                             player1won = false;
+                            logger.debug("r + p => p");
                         } else {
                             //r + s => r
                             player1won = true;
+                            logger.debug("r + s => r");
                         }
                     }
                     break;
@@ -76,9 +73,11 @@ public class GameThread extends AbstractGameLogic implements Runnable {
                         if (player2element == 3) {
                             //p + s => s
                             player1won = false;
+                            logger.debug("p + s => s");
                         } else {
                             //p + r => p
                             player1won = true;
+                            logger.debug("p + r => p");
                         }
                     }
                     break;
@@ -86,22 +85,31 @@ public class GameThread extends AbstractGameLogic implements Runnable {
                         if (player2element == 1) {
                             //s + r => r
                             player1won = false;
+                            logger.debug("s + r => r");
                         } else {
                             //s + p => s;
                             player1won = true;
+                            logger.debug("s + p => s;");
                         }
                     }
                     break;
                 }
+                wins[player1won ? 0 : 1]++;
                 playerwon = player1won ? 0 : 1;
             }
 
             channel1.write(MessageFactory.createPlayerSelectionMessage(player2element, playerwon != 3 ? player1won ? 1 : 0 : 3));
             channel2.write(MessageFactory.createPlayerSelectionMessage(player1element, playerwon != 3 ? player1won ? 0 : 1 : 3));
-            rounds++;
-            if (rounds == 2) {
+            player1element = -1;
+            player2element = -1;
+            if (wins[0] == 3) {
                 channel1.write(MessageFactory.createGameResultMessage(1));
+                channel2.write(MessageFactory.createGameResultMessage(0));
+                game = false;
+            } else if (wins[1] == 3) {
+                channel1.write(MessageFactory.createGameResultMessage(0));
                 channel2.write(MessageFactory.createGameResultMessage(1));
+                game = false;
             }
         }
     }
