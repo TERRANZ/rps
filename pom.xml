@@ -64,7 +64,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.mars.seawar.server.Main</mainClass>
+                            <mainClass>ru.mars.rps.server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
