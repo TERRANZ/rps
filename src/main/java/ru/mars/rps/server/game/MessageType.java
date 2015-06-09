@@ -19,5 +19,5 @@ public class MessageType {
     public static final int C_PLAYER_SELECTED = 90;//клиент выбрал элемент
     public static final int S_PLAYER_SELECTED = 89;//сервер сообщает что выбрал другой игрок и кто выиграл
     public static final int C_PLAYER_CANCELLED_GAME = 88;//клиент расхотел играть и сдаётся
-    public static final int S_GAME_OVER = 87;//движение линии для клиента
+    public static final int S_GAME_OVER = 87;//игра окончена
 }

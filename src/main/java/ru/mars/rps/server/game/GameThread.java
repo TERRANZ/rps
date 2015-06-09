@@ -30,6 +30,8 @@ public class GameThread extends AbstractGameLogic implements Runnable {
                 logger.error("Interrupted while sleep", e);
             }
         }
+
+        logger.debug("GameThread ending");
     }
 
     @Override
@@ -116,7 +118,7 @@ public class GameThread extends AbstractGameLogic implements Runnable {
 
     @Override
     protected void playerCancelGame(Channel channel) {
-        channel1.write(MessageFactory.createGameResultMessage(1));
-        channel2.write(MessageFactory.createGameResultMessage(1));
+        channel1.write(MessageFactory.createGameResultMessage(channel == channel1 ? 0 : 1));
+        channel2.write(MessageFactory.createGameResultMessage(channel == channel2 ? 0 : 1));
     }
 }
