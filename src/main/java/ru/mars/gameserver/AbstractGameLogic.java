@@ -46,7 +46,8 @@ public abstract class AbstractGameLogic {
     public synchronized void playerDisconnect(Channel channel) {
         if (channel.equals(channel1)) {
             try {
-//                channel2.write(MessageFactory.createGameOverMessage(2));
+                if (GameWorker.getInstance().getPlayerState(channel2).equals(GameState.IN_GAME))
+                    channel2.write(MessageFactory.createGameOverMessage(2));
                 GameWorker.getInstance().setPlayerState(channel2, GameState.LOGIN);
             } catch (Exception e) {
                 logger.error("Unable to send player disconnection message to channel2", e);
@@ -54,7 +55,8 @@ public abstract class AbstractGameLogic {
 
         } else {
             try {
-//                channel1.write(MessageFactory.createGameOverMessage(1));
+                if (GameWorker.getInstance().getPlayerState(channel1).equals(GameState.IN_GAME))
+                    channel1.write(MessageFactory.createGameOverMessage(1));
                 GameWorker.getInstance().setPlayerState(channel1, GameState.LOGIN);
             } catch (Exception e) {
                 logger.error("Unable to send player disconnection message to channel1", e);
