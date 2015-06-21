@@ -33,11 +33,15 @@ public class GameWorker extends AbstractGameWorker {
             break;
             case MessageType.C_READY_TO_PLAY: {
                 GameThread gameThread = gameThreadMap.get(channel);
-                gameThread.setPlayerReady(channel);
-                gameStateMap.put(channel, GameState.IN_GAME);
-                if (parameters.isDebug())
-                    logger.info("Player " + playerMap.get(channel).toString() + " is ready to play");
-                channel.write(MessageFactory.wrap(MessageType.S_GAME_READY, ""));
+                if (gameThread == null)
+                    logger.error("Game for channel : " + channel + " is not found");
+                else {
+                    gameThread.setPlayerReady(channel);
+                    gameStateMap.put(channel, GameState.IN_GAME);
+                    if (parameters.isDebug())
+                        logger.info("Player " + playerMap.get(channel).toString() + " is ready to play");
+                    channel.write(MessageFactory.wrap(MessageType.S_GAME_READY, ""));
+                }
             }
             break;
             case MessageType.C_PLAYER_SELECTED: {
